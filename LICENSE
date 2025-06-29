@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2025 Nicolas DEOUX
+Copyright (c) 2025 ndxdev@gmail.com Debian Server VirtualBox Guide
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,26 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+## À propos de cette licence
+
+Cette licence MIT permet :
+- ✅ **Utilisation commerciale** - Utiliser le projet dans des environnements commerciaux
+- ✅ **Modification** - Modifier et adapter le code selon vos besoins
+- ✅ **Distribution** - Distribuer des copies originales ou modifiées
+- ✅ **Utilisation privée** - Utiliser le projet pour des besoins personnels
+- ✅ **Sublicence** - Inclure dans des projets avec d'autres licences
+
+Obligations :
+- 📋 **Inclusion de licence** - Inclure cette licence dans toute redistribution
+- 📋 **Mention du copyright** - Conserver les mentions de copyright
+
+Limitations :
+- ❌ **Aucune responsabilité** - Les auteurs ne sont pas responsables des dommages
+- ❌ **Aucune garantie** - Le logiciel est fourni "tel quel"
+
+## Contribution
+
+En contribuant à ce projet, vous acceptez que vos contributions soient sous cette même licence MIT.
