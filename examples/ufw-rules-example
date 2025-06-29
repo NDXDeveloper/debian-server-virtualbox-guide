@@ -1,0 +1,118 @@
+#!/bin/bash
+# =====================================
+# CONFIGURATION FIREWALL UFW - SERVEUR DEBIAN
+# =====================================
+# Usage: chmod +x ufw-rules-example && sudo ./ufw-rules-example
+
+echo "🛡️  Configuration du firewall UFW pour serveur Debian"
+
+# Réinitialiser UFW (optionnel)
+# sudo ufw --force reset
+
+# Politique par défaut: DENY everything
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+echo "✅ Politiques par défaut configurées"
+
+# =====================================
+# RÈGLES DE BASE (ESSENTIELLES)
+# =====================================
+
+# SSH (CRITIQUE - ne pas oublier!)
+sudo ufw allow ssh
+# Ou pour un port personnalisé:
+# sudo ufw allow 2222/tcp
+
+echo "✅ SSH autorisé"
+
+# =====================================
+# SERVICES WEB (si nécessaire)
+# =====================================
+
+# HTTP (Apache/Nginx)
+# sudo ufw allow 80/tcp
+
+# HTTPS (Apache/Nginx avec SSL)
+# sudo ufw allow 443/tcp
+
+# =====================================
+# BASES DE DONNÉES (accès local uniquement)
+# =====================================
+
+# MySQL/MariaDB (depuis le réseau local seulement)
+# sudo ufw allow from 192.168.1.0/24 to any port 3306
+
+# PostgreSQL (depuis le réseau local seulement)
+# sudo ufw allow from 192.168.1.0/24 to any port 5432
+
+# MongoDB (depuis le réseau local seulement)
+# sudo ufw allow from 192.168.1.0/24 to any port 27017
+
+# =====================================
+# APPLICATIONS SPÉCIFIQUES
+# =====================================
+
+# Docker (si utilisé)
+# sudo ufw allow 2376/tcp    # Docker daemon
+# sudo ufw allow 2377/tcp    # Docker swarm
+
+# Node.js applications
+# sudo ufw allow 3000/tcp    # Application de développement
+# sudo ufw allow 8080/tcp    # Application web alternative
+
+# =====================================
+# MONITORING ET ADMINISTRATION
+# =====================================
+
+# Zabbix agent
+# sudo ufw allow from 192.168.1.0/24 to any port 10050
+
+# SNMP (surveillance réseau)
+# sudo ufw allow from 192.168.1.0/24 to any port 161
+
+# =====================================
+# RÈGLES AVANCÉES
+# =====================================
+
+# Limiter les connexions SSH (anti-brute force)
+sudo ufw limit ssh
+echo "✅ Limitation SSH activée"
+
+# Bloquer une IP spécifique (exemple)
+# sudo ufw deny from 192.168.1.100
+
+# Autoriser une IP spécifique pour tous les services
+# sudo ufw allow from 192.168.1.50
+
+# =====================================
+# RÈGLES PAR INTERFACE (avancé)
+# =====================================
+
+# Autoriser tout sur loopback (localhost)
+sudo ufw allow in on lo
+sudo ufw allow out on lo
+
+# Autoriser depuis une interface spécifique
+# sudo ufw allow in on enp0s8
+
+# =====================================
+# ACTIVATION DU FIREWALL
+# =====================================
+
+# Activer UFW
+sudo ufw enable
+
+echo "🔥 Firewall UFW activé et configuré"
+echo ""
+echo "📊 État actuel du firewall:"
+sudo ufw status verbose
+
+echo ""
+echo "🔍 Pour voir les règles numérotées:"
+echo "sudo ufw status numbered"
+echo ""
+echo "🗑️  Pour supprimer une règle:"
+echo "sudo ufw delete [numéro]"
+echo ""
+echo "⚠️  IMPORTANT: Testez toujours SSH avant de fermer la session!"

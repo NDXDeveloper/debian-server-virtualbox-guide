@@ -1,0 +1,65 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# =====================================
+# CONFIGURATION RÉSEAU STATIQUE
+# =====================================
+
+# Interface principale - Configuration statique
+auto enp0s3
+iface enp0s3 inet static
+    address 192.168.1.75
+    netmask 255.255.255.0
+    gateway 192.168.1.1
+    dns-nameservers 8.8.8.8 8.8.4.4 1.1.1.1
+    dns-search local
+
+# IMPORTANT: Commenter/supprimer les lignes DHCP pour éviter les conflits
+# allow-hotplug enp0s3
+# iface enp0s3 inet dhcp
+
+# =====================================
+# EXEMPLES D'AUTRES CONFIGURATIONS
+# =====================================
+
+# Configuration DHCP alternative (commentée)
+# auto enp0s3
+# iface enp0s3 inet dhcp
+#     dns-nameservers 8.8.8.8 8.8.4.4
+
+# Interface secondaire (si VirtualBox configuré avec 2 cartes réseau)
+# auto enp0s8
+# iface enp0s8 inet static
+#     address 192.168.56.75
+#     netmask 255.255.255.0
+#     # Pas de gateway sur cette interface
+
+# Configuration pour réseau différent (exemple box SFR/Orange)
+# auto enp0s3
+# iface enp0s3 inet static
+#     address 192.168.0.75
+#     netmask 255.255.255.0
+#     gateway 192.168.0.1
+#     dns-nameservers 8.8.8.8 8.8.4.4
+
+# =====================================
+# NOTES D'ADAPTATION
+# =====================================
+
+# 1. Vérifiez votre réseau local avec: ip route | grep default
+# 2. Adaptez la gateway selon votre box/routeur
+# 3. Choisissez une IP libre dans votre plage réseau
+# 4. Testez avec: ping [IP_choisie] avant configuration
+# 5. Une seule configuration par interface !
+
+# Réseaux courants:
+# - Box Orange/Sosh: 192.168.1.x (gateway: 192.168.1.1)
+# - Box SFR: 192.168.0.x ou 192.168.1.x
+# - Box Free: 192.168.0.x ou 192.168.1.x
+# - Box Bouygues: 192.168.1.x

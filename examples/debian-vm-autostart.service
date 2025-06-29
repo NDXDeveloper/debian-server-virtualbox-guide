@@ -1,0 +1,60 @@
+# =====================================
+# SERVICE SYSTEMD - DÉMARRAGE AUTO VM
+# =====================================
+# Fichier: /etc/systemd/system/debian-vm-autostart.service
+# Usage:
+# 1. sudo cp debian-vm-autostart.service /etc/systemd/system/
+# 2. sudo systemctl daemon-reload
+# 3. sudo systemctl enable debian-vm-autostart.service
+
+[Unit]
+Description=Auto-start Debian Server VM
+Documentation=https://github.com/votre-repo/debian-server-virtualbox-guide
+After=network.target
+Wants=network.target
+
+[Service]
+Type=forking
+User=votre-utilisateur
+Group=votre-groupe
+Environment=VBOX_USER_HOME=/home/votre-utilisateur/.config/VirtualBox
+
+# Commandes de démarrage et d'arrêt
+ExecStart=/usr/bin/VBoxManage startvm "debian-server" --type headless
+ExecStop=/usr/bin/VBoxManage controlvm "debian-server" acpipowerbutton
+
+# Gestion du processus
+RemainAfterExit=yes
+TimeoutStartSec=60
+TimeoutStopSec=120
+
+# Redémarrage automatique en cas d'échec
+Restart=on-failure
+RestartSec=30
+
+# Sécurité
+PrivateTmp=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target
+
+# =====================================
+# NOTES D'UTILISATION
+# =====================================
+
+# Configuration:
+# 1. Remplacer 'votre-utilisateur' par votre nom d'utilisateur
+# 2. Remplacer 'votre-groupe' par votre groupe (généralement identique)
+# 3. Adapter le nom de la VM si différent de "debian-server"
+
+# Commandes de gestion:
+# sudo systemctl start debian-vm-autostart     # Démarrer
+# sudo systemctl stop debian-vm-autostart      # Arrêter
+# sudo systemctl status debian-vm-autostart    # État
+# sudo systemctl enable debian-vm-autostart    # Auto-démarrage
+# sudo systemctl disable debian-vm-autostart   # Désactiver auto-démarrage
+
+# Logs:
+# journalctl -u debian-vm-autostart -f         # Suivre les logs
+# journalctl -u debian-vm-autostart --since "1 hour ago"  # Logs récents

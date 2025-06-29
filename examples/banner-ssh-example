@@ -1,0 +1,21 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                           🖥️  SERVEUR PROMETHEUS                          ║
+║                                                                           ║
+║                        📡 Debian 12 Bookworm Server                      ║
+║                                                                           ║
+║  ⚠️  ACCÈS RESTREINT - UTILISATEURS AUTORISÉS UNIQUEMENT                 ║
+║                                                                           ║
+║  📋 Informations importantes:                                             ║
+║  • Toutes les activités sont surveillées et enregistrées                 ║
+║  • L'utilisation non autorisée est strictement interdite                 ║
+║  • Respectez les politiques de sécurité de l'organisation                ║
+║                                                                           ║
+║  🔧 Support technique: admin@exemple.com                                  ║
+║  📅 Dernière mise à jour: $(date +'%d/%m/%Y')                            ║
+║                                                                           ║
+║  💡 Commandes utiles:                                                     ║
+║  • server-info.sh      - Informations système                            ║
+║  • update-debian.sh    - Mise à jour du système                          ║
+║  • list-scripts.sh     - Liste des scripts disponibles                   ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝

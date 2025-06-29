@@ -1,0 +1,111 @@
+# =====================================
+# CONFIGURATION SSH SÉCURISÉE DEBIAN
+# =====================================
+# Fichier: /etc/ssh/sshd_config
+# Usage: sudo cp ssh-config-example /etc/ssh/sshd_config
+# Puis: sudo systemctl restart ssh
+
+# Paramètres de base
+Port 22
+#Port 2222                     # Décommenter pour changer le port (sécurité par obscurité)
+Protocol 2
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+# =====================================
+# SÉCURITÉ
+# =====================================
+
+# Désactiver la connexion root par SSH (SÉCURITÉ CRITIQUE)
+PermitRootLogin no
+
+# Authentification
+PasswordAuthentication yes      # Mettre à 'no' après configuration des clés
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+
+# Limiter les utilisateurs autorisés
+AllowUsers ndx                  # Remplacer 'ndx' par votre utilisateur
+
+# Tentatives de connexion
+LoginGraceTime 60
+MaxAuthTries 3
+MaxSessions 10
+
+# =====================================
+# OPTIMISATIONS
+# =====================================
+
+# Keepalive pour éviter les déconnexions
+ClientAliveInterval 300
+ClientAliveCountMax 2
+
+# Compression pour améliorer les performances
+Compression yes
+
+# Désactiver la recherche DNS inverse (plus rapide)
+UseDNS no
+
+# =====================================
+# FONCTIONNALITÉS DÉSACTIVÉES
+# =====================================
+
+# Désactiver X11 forwarding (serveur headless)
+X11Forwarding no
+
+# Désactiver le forwarding TCP
+AllowTcpForwarding no
+
+# Désactiver les tunnels
+PermitTunnel no
+
+# Désactiver gateway ports
+GatewayPorts no
+
+# =====================================
+# BANNIÈRE (OPTIONNEL)
+# =====================================
+
+# Afficher une bannière de connexion
+Banner /etc/ssh/banner
+
+# =====================================
+# LOGS ET MONITORING
+# =====================================
+
+# Niveau de logs (pour surveillance)
+LogLevel VERBOSE
+SyslogFacility AUTH
+
+# =====================================
+# CONFIGURATIONS ALTERNATIVES
+# =====================================
+
+# Configuration ultra-sécurisée (clés seulement)
+# PasswordAuthentication no
+# ChallengeResponseAuthentication no
+# UsePAM no
+
+# Configuration pour environnement de développement
+# PasswordAuthentication yes
+# PermitRootLogin yes          # JAMAIS en production !
+# X11Forwarding yes
+
+# Configuration multi-utilisateurs
+# AllowUsers ndx admin deploy
+# AllowGroups ssh-users
+
+# Configuration avec authentification 2FA (avec libpam-google-authenticator)
+# ChallengeResponseAuthentication yes
+# AuthenticationMethods publickey,keyboard-interactive
+
+# =====================================
+# NOTES DE SÉCURITÉ
+# =====================================
+
+# 1. Toujours tester la configuration avant de fermer la session
+# 2. Garder une console VirtualBox ouverte pour dépannage
+# 3. Utiliser 'sudo sshd -t' pour vérifier la syntaxe
+# 4. Après changement de port, adapter UFW: sudo ufw allow 2222
+# 5. fail2ban recommandé pour protection anti-brute force

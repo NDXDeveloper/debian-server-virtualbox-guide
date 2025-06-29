@@ -1,0 +1,56 @@
+#!/bin/bash
+# =====================================
+# SCRIPT DE MISE À JOUR BANNIÈRE SSH
+# =====================================
+# Usage: chmod +x update-ssh-banner.sh && ./update-ssh-banner.sh
+
+BANNER_FILE="/etc/ssh/banner"
+TEMP_BANNER="/tmp/ssh-banner-temp"
+
+echo "🎨 Mise à jour de la bannière SSH..."
+
+# Créer la bannière avec les informations actuelles
+cat > "$TEMP_BANNER" << EOF
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                           🖥️  SERVEUR $(hostname -s | tr '[:lower:]' '[:upper:]')                          ║
+║                                                                           ║
+║                        📡 $(lsb_release -d | cut -f2)                      ║
+║                                                                           ║
+║  ⚠️  ACCÈS RESTREINT - UTILISATEURS AUTORISÉS UNIQUEMENT                 ║
+║                                                                           ║
+║  📋 Informations système:                                                 ║
+║  • IP du serveur: $(ip route get 8.8.8.8 | awk '{print $7; exit}')                                        ║
+║  • Kernel: $(uname -r)                            ║
+║  • Uptime: $(uptime -p)                           ║
+║  • Dernière mise à jour: $(date +'%d/%m/%Y à %H:%M')                     ║
+║                                                                           ║
+║  🔧 Scripts d'administration disponibles:                                 ║
+║  • server-info.sh      - Informations détaillées du système              ║
+║  • update-debian.sh    - Mise à jour automatique                         ║
+║  • backup-config.sh    - Sauvegarde des configurations                   ║
+║  • security-audit.sh   - Audit de sécurité                               ║
+║  • system-cleanup.sh   - Nettoyage du système                            ║
+║  • list-scripts.sh     - Liste complète des scripts                      ║
+║                                                                           ║
+║  📞 Support: Type 'list-scripts.sh' pour l'aide                          ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+EOF
+
+# Installer la nouvelle bannière
+sudo mv "$TEMP_BANNER" "$BANNER_FILE"
+sudo chmod 644 "$BANNER_FILE"
+
+# Vérifier que la bannière est configurée dans sshd_config
+if ! grep -q "^Banner " /etc/ssh/sshd_config; then
+    echo "📝 Ajout de la bannière dans la configuration SSH..."
+    echo "Banner $BANNER_FILE" | sudo tee -a /etc/ssh/sshd_config
+
+    # Redémarrer SSH pour appliquer les changements
+    echo "🔄 Redémarrage du service SSH..."
+    sudo systemctl restart ssh
+fi
+
+echo "✅ Bannière SSH mise à jour avec succès!"
+echo "🔍 Test avec: ssh localhost (puis Ctrl+C pour annuler)"

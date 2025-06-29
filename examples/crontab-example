@@ -1,0 +1,116 @@
+# =====================================
+# EXEMPLE DE CRONTAB POUR SERVEUR DEBIAN
+# =====================================
+# Installation: crontab -e puis copier les lignes souhaitées
+# Format: minute heure jour mois jour_semaine commande
+
+# =====================================
+# MAINTENANCE QUOTIDIENNE
+# =====================================
+
+# Vérification quotidienne du système à 8h
+0 8 * * * /home/ndx/daily-check.sh
+
+# Sauvegarde quotidienne des configurations à 2h
+0 2 * * * /home/ndx/scripts/backup-config.sh --configs-only
+
+# Nettoyage léger quotidien à 3h
+0 3 * * * /home/ndx/scripts/system-cleanup.sh --logs-only
+
+# =====================================
+# MAINTENANCE HEBDOMADAIRE
+# =====================================
+
+# Mise à jour complète le dimanche à 3h
+0 3 * * 0 /home/ndx/scripts/update-debian.sh -q -y -b --auto-reboot
+
+# Sauvegarde complète le samedi à 1h
+0 1 * * 6 /home/ndx/scripts/backup-config.sh --full
+
+# Nettoyage complet le samedi à 4h
+0 4 * * 6 /home/ndx/scripts/system-cleanup.sh -a
+
+# Audit de sécurité le lundi à 5h
+0 5 * * 1 /home/ndx/scripts/security-audit.sh -d --report /home/ndx/reports/security-$(date +\%Y\%m\%d).txt
+
+# =====================================
+# MONITORING CONTINU
+# =====================================
+
+# Surveillance système toutes les 15 minutes
+*/15 * * * * /home/ndx/health-check.sh
+
+# Surveillance réseau toutes les 30 minutes
+*/30 * * * * /home/ndx/scripts/network-monitor.sh -c > /dev/null
+
+# Test de connectivité toutes les heures
+0 * * * * ping -c 1 8.8.8.8 || echo "$(date): Perte connectivité" >> /home/ndx/logs/connectivity.log
+
+# =====================================
+# SNAPSHOTS ET SAUVEGARDES
+# =====================================
+
+# Snapshot quotidien à 1h (depuis l'hôte)
+# 0 1 * * * /home/user/auto-snapshot.sh
+
+# Rotation des logs le premier du mois à 0h30
+30 0 1 * * sudo logrotate -f /etc/logrotate.conf
+
+# =====================================
+# TÂCHES SPÉCIALISÉES
+# =====================================
+
+# Redémarrage hebdomadaire (optionnel) le dimanche à 4h
+# 0 4 * * 0 sudo reboot
+
+# Collecte des métriques de performance toutes les 5 minutes
+*/5 * * * * echo "$(date),$(uptime | awk -F'load average:' '{print $2}'),$(free | awk 'NR==2{printf \"%.1f\", $3*100/$2}')" >> /home/ndx/logs/metrics.log
+
+# Nettoyage des anciens logs le premier du mois à 2h
+0 2 1 * * find /home/ndx/logs -name "*.log" -mtime +30 -delete
+
+# =====================================
+# EXEMPLES DE TÂCHES PERSONNALISÉES
+# =====================================
+
+# Base de données: dump quotidien à 23h
+# 0 23 * * * mysqldump --all-databases > /home/ndx/backups/mysql-$(date +\%Y\%m\%d).sql
+
+# Application web: redémarrage du service à 2h
+# 0 2 * * * sudo systemctl restart nginx
+
+# Synchronisation de fichiers
+# 30 1 * * * rsync -av /home/ndx/important/ /backup/location/
+
+# =====================================
+# VARIABLES D'ENVIRONNEMENT
+# =====================================
+
+# Définir le PATH si nécessaire
+PATH=/home/ndx/scripts:/usr/local/bin:/usr/bin:/bin
+
+# Email pour les notifications (si postfix configuré)
+MAILTO=admin@exemple.com
+
+# =====================================
+# NOTES D'UTILISATION
+# =====================================
+
+# Format des champs:
+# *    *    *    *    *  commande
+# │    │    │    │    │
+# │    │    │    │    └─── jour de la semaine (0-7, dimanche=0 ou 7)
+# │    │    │    └──────── mois (1-12)
+# │    │    └─────────────── jour du mois (1-31)
+# │    └──────────────────── heure (0-23)
+# └───────────────────────── minute (0-59)
+
+# Commandes utiles:
+# crontab -l        # Voir le crontab actuel
+# crontab -e        # Éditer le crontab
+# crontab -r        # Supprimer le crontab
+# sudo crontab -l   # Voir le crontab de root
+
+# Logs cron:
+# grep CRON /var/log/syslog
+# journalctl -u cron
